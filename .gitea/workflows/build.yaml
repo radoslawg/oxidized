@@ -17,7 +17,7 @@ jobs:
           override: true
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y clang cmake
+        run: sudo apt-get update && sudo apt-get install -y clang cmake libxrandr-dev
 
       - name: Build project
         run: cargo build --verbose

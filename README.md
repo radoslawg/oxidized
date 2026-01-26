@@ -1,4 +1,4 @@
-![Build Workflow][https://git.grzanka.org/radoslawg/Oxidized/actions/workflows/build.yaml/badge.svg]
+![Build Workflow](https://git.grzanka.org/radoslawg/Oxidized/actions/workflows/build.yaml/badge.svg)
 
 # Oxidized
 

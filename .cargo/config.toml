@@ -1,2 +1,0 @@
-[env]
-LIBCLANG_PATH = { value = "extern/", relative = true }

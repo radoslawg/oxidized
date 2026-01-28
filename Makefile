@@ -16,8 +16,12 @@ endif
 
 # The main build command
 build:
+ifeq ($(OS),Windows_NT)
 	@echo "Setting LIBCLANG_PATH to: $(LIBCLANG_PATH)"
 	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo build
+else
+	cargo build
+endif
 
 # Run the project
 run:

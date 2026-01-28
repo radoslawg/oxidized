@@ -12,7 +12,7 @@ else
     EXE_EXT :=
 endif
 
-.PHONY: build run clean
+.PHONY: build run test coverage clean
 
 # The main build command
 build:
@@ -22,6 +22,12 @@ build:
 # Run the project
 run:
 	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo run
+
+test:
+	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo test
+
+coverage:
+	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo tarpaulin --out Html
 
 # Clean the project
 clean:

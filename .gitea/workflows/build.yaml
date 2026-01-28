@@ -20,4 +20,19 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y clang cmake libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libx11-dev libxxf86vm-dev libgl1-mesa-dev libudev-dev libvulkan-dev
 
       - name: Build project
-        run: cargo build --verbose
+        run: make build
+
+      - name: Run tests
+        run: make test
+
+      - name: Install tarpaulin
+        run: cargo install cargo-tarpaulin --locked
+
+      - name: Run coverage
+        run: make coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: tarpaulin-report.html

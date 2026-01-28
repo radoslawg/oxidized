@@ -4,5 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+log = "0.4.29"
 raylib = { version = "5.5.1", features = [] }
+simplelog = "0.12.2"
 

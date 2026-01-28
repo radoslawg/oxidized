@@ -41,9 +41,9 @@ endif
 coverage:
 ifeq ($(OS),Windows_NT)
 	@echo "Setting LIBCLANG_PATH to: $(LIBCLANG_PATH)"
-	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo tarpaulin --out Html --no-aslr
+	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo tarpaulin --out Html
 else
-	 cargo tarpaulin --out Html --no-aslr
+	 setarch $(shell uname -m) -R cargo tarpaulin --out Html
 endif
 
 # Clean the project

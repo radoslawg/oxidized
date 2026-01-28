@@ -5,11 +5,9 @@ ifeq ($(OS),Windows_NT)
     # Convert current directory to Windows format and append \extern
 		mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
     LIBCLANG_PATH := $(dir $(mkfile_path))extern
-    EXE_EXT := .exe
 else
     # Linux / macOS logic
     LIBCLANG_PATH :=
-    EXE_EXT :=
 endif
 
 .PHONY: build run test coverage clean
@@ -25,13 +23,28 @@ endif
 
 # Run the project
 run:
+ifeq ($(OS),Windows_NT)
+	@echo "Setting LIBCLANG_PATH to: $(LIBCLANG_PATH)"
 	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo run
+else
+	cargo run
+endif
 
 test:
+ifeq ($(OS),Windows_NT)
+	@echo "Setting LIBCLANG_PATH to: $(LIBCLANG_PATH)"
 	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo test
+else
+	cargo test
+endif
 
 coverage:
+ifeq ($(OS),Windows_NT)
+	@echo "Setting LIBCLANG_PATH to: $(LIBCLANG_PATH)"
 	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo tarpaulin --out Html
+else
+	 cargo tarpaulin --out Html
+endif
 
 # Clean the project
 clean:

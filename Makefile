@@ -43,7 +43,7 @@ ifeq ($(OS),Windows_NT)
 	@echo "Setting LIBCLANG_PATH to: $(LIBCLANG_PATH)"
 	LIBCLANG_PATH="$(LIBCLANG_PATH)" cargo tarpaulin --out Html
 else
-	 setarch $(shell uname -m) -R cargo tarpaulin --out Html
+	 cargo tarpaulin --out Html --engine llvm
 endif
 
 # Clean the project

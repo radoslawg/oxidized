@@ -1,9 +1,11 @@
 use raylib::{
     self,
     color::Color,
+    consts::TextureFilter,
     math::{Rectangle, Vector2},
     misc::AsF32,
     prelude::{RaylibDraw, RaylibTextureModeExt},
+    texture::RaylibTexture2D,
 };
 use simplelog::TermLogger;
 
@@ -37,6 +39,7 @@ fn main() {
     let mut target_texture = rl
         .load_render_texture(&thread, WINDOW_WIDTH as u32, WINDOW_HEIGHT as u32)
         .expect("Cannot create render texture");
+    target_texture.set_texture_filter(&thread, TextureFilter::TEXTURE_FILTER_POINT);
     while !rl.window_should_close() {
         rl.draw_texture_mode(&thread, &mut target_texture, |mut d| {
             d.clear_background(Color::BLACK);

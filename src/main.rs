@@ -1,4 +1,10 @@
-use raylib::{self, color::Color, prelude::RaylibDraw};
+use raylib::{
+    self,
+    color::Color,
+    math::{Rectangle, Vector2},
+    misc::AsF32,
+    prelude::{RaylibDraw, RaylibTextureModeExt},
+};
 use simplelog::TermLogger;
 
 const WINDOW_WIDTH: i32 = 1920;
@@ -21,19 +27,47 @@ fn main() {
     let (mut rl, thread) = raylib::init()
         .size(WINDOW_WIDTH, WINDOW_HEIGHT)
         .title(WINDOW_TITLE)
+        .resizable()
         .build();
 
     let splash = rl
         .load_texture(&thread, SPLASH_SCREEN_PATH)
         .expect("Splash Screen not found");
 
+    let mut target_texture = rl
+        .load_render_texture(&thread, WINDOW_WIDTH as u32, WINDOW_HEIGHT as u32)
+        .expect("Cannot create render texture");
     while !rl.window_should_close() {
-        let mut d = rl.begin_drawing(&thread);
-        d.clear_background(Color::BLACK);
-        d.draw_texture(&splash, 0, 0, Color::WHITE);
-        d.draw_text("Oxidized", (1920 / 2) - 200, 10, 100, Color::CHOCOLATE);
-        d.draw_text("Loading...", (1920 / 2) - 100, 200, 50, Color::LIGHTGRAY);
-        d.draw_fps(2, 2)
+        rl.draw_texture_mode(&thread, &mut target_texture, |mut d| {
+            d.clear_background(Color::BLACK);
+            d.draw_texture(&splash, 0, 0, Color::WHITE);
+            d.draw_text(
+                "Oxidized",
+                (WINDOW_WIDTH / 2) - 200,
+                10,
+                100,
+                Color::CHOCOLATE,
+            );
+            d.draw_fps(0, 0)
+        });
+
+        rl.draw(&thread, |mut d| {
+            // Scale the render texture to fit the window
+            d.draw_texture_pro(
+                &target_texture,
+                // Negative height to flip the texture vertically because of how OpenGL works
+                Rectangle::new(0., 0., WINDOW_WIDTH.as_f32(), -WINDOW_HEIGHT.as_f32()),
+                Rectangle::new(
+                    0.,
+                    0.,
+                    d.get_render_width().as_f32(),
+                    d.get_render_height().as_f32(),
+                ),
+                Vector2::new(0., 0.),
+                0.,
+                Color::WHITE,
+            );
+        });
     }
 }
 

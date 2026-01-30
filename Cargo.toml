@@ -5,6 +5,10 @@ edition = "2024"
 
 [dependencies]
 log = "0.4.29"
-raylib = { version = "5.5.1", features = [] }
+raylib = { git = "https://github.com/raylib-rs/raylib-rs", branch = "unstable", features = [
+
+] }
 simplelog = "0.12.2"
 
+[build-dependencies]
+fs_extra = "1.3.0"

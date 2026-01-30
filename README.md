@@ -2,36 +2,59 @@
 
 # Oxidized
 
-Simple classic roguelike game writeen in Rust and Raylib.
- - Graphics style is fantasy, colorful 2D Pixelart.
+Simple cyberpunk roguelike game writen in Rust and Raylib.
+ - Graphics style is 2D Pixelart in rust color palette.
  - Sprites have size 32x32.
- - Dungeon is made of levels connected by single staircase.
- - Dungeon level consist of rooms connected by corridors.
- - There are 10 levels in total, deeper the dungeon the harder enemies are spawned and larger dungeon is generated.
- - At the end of 10th level is staircase to boss lair.
+ - Skyscraper is made of levels connected by single staircase and/or elevator.
+ - Skyscraper level consist of rooms with entrance from main, central corridor and also connected between them.
+ - There are 10 levels in total, higher in the skyscraper the harder enemies are spawned and more complex level is generated.
+ - At the end of 10th level is staircase to gang boss room.
  - Player and enemies should have graphics facing 8 ways.
  - It should be modelled with custom Entity Component System written from scratch
  - It should use logging using `log` and `simplelog` for logging
  - It should use unit tests to test functionality and strive for largest coverage possible.
+  - As this is idiomatic to Rust, tests should be created in a same file as tested unit.
  - It should have gitea actions that would check if project builds, run all the tests and check coverage of those tests.
  - Code should be easy to follow and commented where necessary
 
-## Build
+## Mechanics
+ - Movement should follow Vim navigation keys
+ - Running into another actor attacks them
+ - Player has attributes
+    - Strength (STR): Attack Strength
+    - Accuracy (ACC): Used for projectile weapons
+    - Health Points (HP): How many damage can be taken before dead
+    - Armor Points (A): How many damage points is soaked before HPs are deducted.
 
-Because Windows version requires `libclang.dll` pointed by custom Environment Variable, simple `Makefile` is used to build the project.
+## Build, Test and coverage
+
+### Repository
+ - Commits should follow [gimoji](https://gitmoji.dev/) scheme of naming convention.
+
+### Windows
+On Windows, you have to install clang from visual studio (or at least download `libclang.dll`) and set `LIBCLANG_PATH` environment that would point to it.
+
+### Build
 
 ```bash
-make build
+cargo build
 ```
 
-## Test
+### Test
 
 Simillarly to aboce use `make` to run tests.
 ```bash
-make test
+cargo test
 ```
-## Coverage
+### Coverage
 Coverage is performed using `tarpaulin`
 ```bash
-make coverage
+cargo tarpaulin --out Html
 ```
+In docker environment (i.e. during CI):
+```bash
+cargo tarpaulin --out Html --engine llvm
+```
+
+## Todo
+ - [ ] Read more on tarpaulin

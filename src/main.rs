@@ -9,8 +9,10 @@ use raylib::{
 };
 use simplelog::TermLogger;
 
-const WINDOW_WIDTH: i32 = 1920;
-const WINDOW_HEIGHT: i32 = 1080;
+const WINDOW_WIDTH: i32 = 1280;
+const WINDOW_HEIGHT: i32 = 720;
+const RENDER_WIDTH: u32 = 320;
+const RENDER_HEIGHT: u32 = 200;
 const WINDOW_TITLE: &str = "Oxidize";
 const SPLASH_SCREEN_PATH: &str = "assets/oxidized_splashscreen.png";
 
@@ -37,13 +39,22 @@ fn main() {
         .expect("Splash Screen not found");
 
     let mut target_texture = rl
-        .load_render_texture(&thread, WINDOW_WIDTH as u32, WINDOW_HEIGHT as u32)
+        .load_render_texture(&thread, RENDER_WIDTH, RENDER_HEIGHT)
         .expect("Cannot create render texture");
     target_texture.set_texture_filter(&thread, TextureFilter::TEXTURE_FILTER_POINT);
     while !rl.window_should_close() {
         rl.draw_texture_mode(&thread, &mut target_texture, |mut d| {
             d.clear_background(Color::BLACK);
-            d.draw_texture(&splash, 0, 0, Color::WHITE);
+            d.draw_texture_pro(
+                &splash,
+                // Negative height to flip the texture vertically because of how OpenGL works
+                Rectangle::new(0., 0., 1920., 1080.),
+                Rectangle::new(0., 0., RENDER_WIDTH.as_f32(), RENDER_HEIGHT.as_f32()),
+                Vector2::new(0., 0.),
+                0.,
+                Color::WHITE,
+            );
+            // d.draw_texture(&splash, 0, 0, Color::WHITE);
             d.draw_text(
                 "Oxidized",
                 (WINDOW_WIDTH / 2) - 200,
@@ -51,7 +62,6 @@ fn main() {
                 100,
                 Color::CHOCOLATE,
             );
-            d.draw_fps(0, 0)
         });
 
         rl.draw(&thread, |mut d| {
@@ -59,7 +69,7 @@ fn main() {
             d.draw_texture_pro(
                 &target_texture,
                 // Negative height to flip the texture vertically because of how OpenGL works
-                Rectangle::new(0., 0., WINDOW_WIDTH.as_f32(), -WINDOW_HEIGHT.as_f32()),
+                Rectangle::new(0., 0., RENDER_WIDTH.as_f32(), -RENDER_HEIGHT.as_f32()),
                 Rectangle::new(
                     0.,
                     0.,
@@ -70,6 +80,7 @@ fn main() {
                 0.,
                 Color::WHITE,
             );
+            d.draw_fps(0, 0);
         });
     }
 }
@@ -80,9 +91,15 @@ mod tests {
 
     #[test]
     fn verify_window_config() {
-        assert_eq!(WINDOW_WIDTH, 1920);
-        assert_eq!(WINDOW_HEIGHT, 1080);
+        assert_eq!(WINDOW_WIDTH, 1280);
+        assert_eq!(WINDOW_HEIGHT, 720);
         assert_eq!(WINDOW_TITLE, "Oxidize");
+    }
+
+    #[test]
+    fn verify_render_config() {
+        assert_eq!(RENDER_WIDTH, 320);
+        assert_eq!(RENDER_HEIGHT, 200);
     }
 
     #[test]

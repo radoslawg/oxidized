@@ -1,18 +1,19 @@
 use raylib::{
-    self,
+    self, RaylibHandle, RaylibThread,
     color::Color,
     consts::TextureFilter,
     math::{Rectangle, Vector2},
     misc::AsF32,
     prelude::{RaylibDraw, RaylibTextureModeExt},
-    texture::RaylibTexture2D,
+    texture::{Image, RaylibTexture2D, Texture2D},
 };
 use simplelog::TermLogger;
 
 const WINDOW_WIDTH: i32 = 1280;
 const WINDOW_HEIGHT: i32 = 720;
 const RENDER_WIDTH: u32 = 320;
-const RENDER_HEIGHT: u32 = 200;
+const RENDER_HEIGHT: u32 =
+    (RENDER_WIDTH as f32 * (WINDOW_HEIGHT as f32 / WINDOW_WIDTH as f32)) as u32;
 const WINDOW_TITLE: &str = "Oxidize";
 const SPLASH_SCREEN_PATH: &str = "assets/oxidized_splashscreen.png";
 
@@ -99,7 +100,7 @@ mod tests {
     #[test]
     fn verify_render_config() {
         assert_eq!(RENDER_WIDTH, 320);
-        assert_eq!(RENDER_HEIGHT, 200);
+        assert_eq!(RENDER_HEIGHT, 180);
     }
 
     #[test]
@@ -107,6 +108,14 @@ mod tests {
         assert!(
             std::path::Path::new(SPLASH_SCREEN_PATH).exists(),
             "Splash screen asset missing"
+        );
+    }
+
+    #[test]
+    fn it_has_correct_aspect_ratio() {
+        assert_eq!(
+            RENDER_WIDTH as f32 / RENDER_HEIGHT as f32,
+            WINDOW_WIDTH as f32 / WINDOW_HEIGHT as f32
         );
     }
 }

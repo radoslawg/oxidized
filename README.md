@@ -23,6 +23,46 @@ Simple cyberpunk roguelike game writen in Rust and Raylib.
  - It should have gitea actions that would check if project builds, run all the tests and check coverage of those tests.
  - Code should be easy to follow and commented where necessary
 
+## Architecture
+
+```
+src/
+├── main.rs              # Entry point, window setup, main loop
+├── lib.rs               # Public API for integration tests
+├── game/
+│   ├── mod.rs
+│   └── state.rs         # Game state machine (Menu, Playing, Paused, GameOver)
+├── ecs/
+│   ├── mod.rs
+│   ├── world.rs         # Entity storage, component management
+│   ├── entity.rs        # Entity ID type
+│   ├── component.rs     # Component trait + storage
+│   └── system.rs        # System trait
+├── components/          # Game-specific components
+│   ├── mod.rs
+│   ├── transform.rs     # Position, facing direction
+│   ├── sprite.rs        # Sprite reference, animation state
+│   ├── stats.rs         # STR, ACC, HP, Armor
+│   └── actor.rs         # Player/Enemy marker, AI state
+├── systems/             # Game-specific systems
+│   ├── mod.rs
+│   ├── input.rs         # Player input -> intent
+│   ├── movement.rs      # Process movement
+│   ├── combat.rs        # Bump-to-attack resolution
+│   ├── render.rs        # Draw all entities
+│   └── ai.rs            # Enemy behavior
+├── level/
+│   ├── mod.rs
+│   ├── generator.rs     # Procedural level generation
+│   └── tile.rs          # Tile types, map data
+├── resources/           # Non-ECS shared state
+│   ├── mod.rs
+│   ├── atlas.rs         # Sprite atlas
+│   └── timer.rs         # Timer with callbacks
+└── utils/
+    └── mod.rs           # Helpers, constants
+```
+
 ## Mechanics
  - Movement should follow Vim navigation keys
  - Running into another actor attacks them
@@ -63,4 +103,35 @@ cargo tarpaulin --out Html --engine llvm
 ```
 
 ## Todo
+
+### Core Systems
+ - [ ] Implement game state machine (menu, gameplay, pause etc.)
+ - [ ] Implement Entity Component System
+ - [x] Set up logging with `log` and `simplelog`
+ - [ ] Implement level generation algorithm (rooms, corridors, connections)
+ - [ ] Implement enemy spawning system with difficulty scaling per floor
+ - [ ] Implement timer with callback method/closure
+
+### Gameplay
+ - [ ] Implement Vim-style movement (h/j/k/l + diagonals)
+ - [ ] Implement player controls
+ - [ ] Implement melee combat (bump-to-attack)
+ - [ ] Implement player attributes (STR, ACC, HP, Armor)
+ - [ ] Implement staircase/elevator traversal between floors
+ - [ ] Implement boss encounter on floor 10
+
+### Graphics
+ - [ ] Implement auto sprite atlas builder
+ - [ ] Provide player sprites (8 directional)
+ - [ ] Provide enemy sprites (8 directional)
+ - [ ] Create tileset for rooms/corridors
+ - [ ] Implement sprite direction system (8-way facing)
+ - [ ] Implement glitch shader for main menu screen - https://www.youtube.com/watch?v=RTwPxsvLN_8
+
+### Polish
+ - [ ] Add sound effects / music
+ - [ ] Implement save/load system
+ - [ ] Add UI for player stats display
+
+### Development
  - [ ] Read more on tarpaulin

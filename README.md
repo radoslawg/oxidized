@@ -50,32 +50,4 @@ Simillarly to above use `make` to run tests.
 cargo test
 ```
 
-## Todo
 
-### Core Systems
- - [ ] Implement game state machine (menu, gameplay, pause etc.)
- - [ ] Implement Entity Component System
- - [x] Set up logging with `log` and `simplelog`
- - [ ] Implement level generation algorithm based on simple ascii map definition.
- - [ ] Implement timer with callback method/closure
-
-### Gameplay
- - [ ] Implement Vim-style movement (h/j/k/l + diagonals)
- - [ ] Implement player controls
- - [ ] Implement melee combat (bump-to-attack)
- - [ ] Implement player attributes (STR, ACC, HP, Armor)
- - [ ] Implement staircase/elevator traversal between floors
- - [ ] Implement boss encounter on floor 10
-
-### Graphics
- - [ ] Create main character model with basic idle animation.
- - [ ] Create simple floor tile model.
- - [ ] Implement glitch shader for main menu screen - https://www.youtube.com/watch?v=RTwPxsvLN_8
-
-### Polish
- - [ ] Add sound effects / music
- - [ ] Implement save/load system
- - [ ] Add UI for player stats display
-
-### Future
- - [ ] Read more on tarpaulin and coverage

@@ -1,0 +1,11 @@
+[package]
+name = "raylib_oxidized"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "raylib_oxidized"
+path = "src/lib.rs"
+
+[dependencies]
+raylib-ffi = "5.5.1"

@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "raylib_oxidized",
+    "oxidized",
+]
+resolver = "2"

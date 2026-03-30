@@ -1,4 +1,6 @@
-![Build Workflow](https://git.grzanka.org/radoslawg/Oxidized/actions/workflows/build.yaml/badge.svg)
+<a href="https://git.grzanka.org/radoslawg/Oxidized">
+    <img src="https://git.grzanka.org/radoslawg/Oxidized/actions/workflows/build.yaml/badge.svg" alt="Build status"/>
+</a>
 <a href="https://gitmoji.dev">
   <img
     src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square"

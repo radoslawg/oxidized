@@ -5,7 +5,6 @@ edition = "2024"
 
 [dependencies]
 log = "0.4.29"
-raylib-ffi = "5.5.1"
 simplelog = "0.12.2"
 raylib_oxidized = { path = "../raylib_oxidized" }
 

@@ -1,21 +1,30 @@
 #version 330
 
+// Inputs from Vertex Shader
 in vec2 fragTexCoord;
-in vec3 fragBrightness; // NEW: Taking in the 3-part brightness
+in vec4 fragColor;
+in float fragBrightness;
 
+// Standard Uniforms
+uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 
+// Output pixel
 out vec4 finalColor;
 
 void main()
 {
-    // Apply the separate RGB brightness values to the base material color
-    vec3 rawColor = colDiffuse.rgb * fragBrightness;
+    // 1. Get the texture color (defaults to white if none is assigned)
+    vec4 texelColor = texture(texture0, fragTexCoord);
 
-    // Apply our Gamma Correction so it isn't too dark
-    float gamma = 2.2;
+    // 2. Combine all color sources and apply lighting
+    // Texture x Material Tint x Vertex Color x Brightness
+    vec3 rawColor = texelColor.rgb * colDiffuse.rgb * fragColor.rgb * fragBrightness;
+
+    // 3. Apply Gamma Correction (Linear -> sRGB for your monitor)
+    float gamma = 1.2;
     finalColor.rgb = pow(rawColor, vec3(1.0 / gamma));
 
-    // Keep the original opacity
-    finalColor.a = colDiffuse.a;
+    // 4. Preserve the combined Alpha (opacity) channels
+    finalColor.a = texelColor.a * colDiffuse.a * fragColor.a;
 }

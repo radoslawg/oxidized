@@ -26,10 +26,12 @@ pub fn main() {
         },
         45.0,
     );
+    let mut wall = Model::load_model("assets/models/BasicWall.gltf");
     let mut floor = Model::load_model("assets/models/floor.glb");
     let mut character = Model::load_model("assets/models/block_man.gltf");
     let mut woman = Model::load_model("assets/models/block_woman.gltf");
     let mut car = Model::load_model("assets/models/car.glb");
+    let texture = load_texture("assets/colors/apollo.png");
     let light_shader =
         Shader::load_shader("assets/shaders/light.vert", "assets/shaders/light.frag");
     // let light_pos_loc = light_shader.get_shader_location("pointLightPos");
@@ -44,6 +46,9 @@ pub fn main() {
         material.shader = light_shader.shader;
     }
     for material in car.materials_mut() {
+        material.shader = light_shader.shader;
+    }
+    for material in wall.materials_mut() {
         material.shader = light_shader.shader;
     }
     set_target_fps(120);
@@ -73,6 +78,11 @@ pub fn main() {
                 }
                 car.draw_model(Vector3 {
                     x: 0.0,
+                    y: 0.5,
+                    z: 0.0,
+                });
+                wall.draw_model(Vector3 {
+                    x: 4.0,
                     y: 0.5,
                     z: 0.0,
                 });

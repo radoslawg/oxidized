@@ -8,6 +8,10 @@ pub mod model;
 pub mod shader;
 pub mod window;
 
+pub fn load_texture(path: &str) -> Texture2D {
+    unsafe { raylib_ffi::LoadTexture(raylib_ffi::rl_str!(path)) }
+}
+
 pub fn clear_background(color: raylib_ffi::Color) {
     unsafe {
         raylib_ffi::ClearBackground(color);

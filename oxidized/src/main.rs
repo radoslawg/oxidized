@@ -26,14 +26,15 @@ pub fn main() {
         },
         45.0,
     );
-    let mut model = Model::load_model("d:/model.gltf");
-    let mut character = Model::load_model("d:/block_man.gltf");
-    let mut woman = Model::load_model("d:/block_woman.gltf");
-    let mut car = Model::load_model("d:/car.glb");
-    let light_shader = Shader::load_shader("d:/light.vert", "d:/light.frag");
+    let mut floor = Model::load_model("assets/models/floor.glb");
+    let mut character = Model::load_model("assets/models/block_man.gltf");
+    let mut woman = Model::load_model("assets/models/block_woman.gltf");
+    let mut car = Model::load_model("assets/models/car.glb");
+    let light_shader =
+        Shader::load_shader("assets/shaders/light.vert", "assets/shaders/light.frag");
     // let light_pos_loc = light_shader.get_shader_location("pointLightPos");
 
-    for material in model.materials_mut() {
+    for material in floor.materials_mut() {
         material.shader = light_shader.shader;
     }
     for material in character.materials_mut() {
@@ -63,7 +64,7 @@ pub fn main() {
             mode_3d(&camera, || {
                 for x in -4..=6 {
                     for z in -4..=6 {
-                        model.draw_model(Vector3 {
+                        floor.draw_model(Vector3 {
                             x: -4.0 * x as f32,
                             y: 0.0,
                             z: -4.0 * z as f32,

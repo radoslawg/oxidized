@@ -1,9 +1,6 @@
 use raylib_oxidized::{
-    camera3d::{Camera3D, Vector3},
-    model::Model,
-    shader::Shader,
-    window::Window,
-    *,
+    camera3d::Camera3D, consts::MaterialMapIndex, model::Model, shader::Shader, vector::Vector3,
+    window::Window, *,
 };
 
 pub fn main() {
@@ -27,30 +24,23 @@ pub fn main() {
         45.0,
     );
     let mut wall = Model::load_model("assets/models/BasicWall.gltf");
-    let mut floor = Model::load_model("assets/models/floor.glb");
-    let mut character = Model::load_model("assets/models/block_man.gltf");
-    let mut woman = Model::load_model("assets/models/block_woman.gltf");
-    let mut car = Model::load_model("assets/models/car.glb");
+    let floor = Model::load_model("assets/models/floor.glb");
+    let character = Model::load_model("assets/models/block_man.gltf");
+    let woman = Model::load_model("assets/models/Block_Woman.gltf");
+    let car = Model::load_model("assets/models/car.glb");
     let texture = load_texture("assets/colors/apollo.png");
     let light_shader =
         Shader::load_shader("assets/shaders/light.vert", "assets/shaders/light.frag");
     // let light_pos_loc = light_shader.get_shader_location("pointLightPos");
 
-    for material in floor.materials_mut() {
-        material.shader = light_shader.shader;
-    }
-    for material in character.materials_mut() {
-        material.shader = light_shader.shader;
-    }
-    for material in woman.materials_mut() {
-        material.shader = light_shader.shader;
-    }
-    for material in car.materials_mut() {
-        material.shader = light_shader.shader;
-    }
-    for material in wall.materials_mut() {
-        material.shader = light_shader.shader;
-    }
+    wall.get_material(0)
+        .set_texture(MaterialMapIndex::Albedo, texture);
+
+    floor.set_shader(&light_shader);
+    character.set_shader(&light_shader);
+    woman.set_shader(&light_shader);
+    car.set_shader(&light_shader);
+    wall.set_shader(&light_shader);
     set_target_fps(120);
     // Render the window
     while !(window.should_close()) {

@@ -4,8 +4,12 @@ use crate::camera3d::Camera3D;
 
 pub mod camera3d;
 pub mod colors;
+pub mod consts;
+pub mod material;
 pub mod model;
 pub mod shader;
+pub mod texture2d;
+pub mod vector;
 pub mod window;
 
 pub fn load_texture(path: &str) -> Texture2D {

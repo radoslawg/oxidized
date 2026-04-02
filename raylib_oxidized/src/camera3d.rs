@@ -1,4 +1,4 @@
-pub type Vector3 = raylib_ffi::Vector3;
+use crate::Vector3;
 
 pub struct Camera3D {
     pub camera: raylib_ffi::Camera3D,

@@ -1,9 +1,10 @@
+use anyhow::{Context, Result};
 use raylib_oxidized::{
-    camera3d::Camera3D, consts::MaterialMapIndex, model::Model, shader::Shader, vector::Vector3,
+    camera3d::Camera3D, material::MaterialMapIndex, model::Model, shader::Shader, vector::Vector3,
     window::Window, *,
 };
 
-pub fn main() {
+pub fn main() -> Result<()> {
     let window = Window::new(1600, 900, "Oxidized");
     let mut camera = Camera3D::new(
         Vector3 {
@@ -34,6 +35,7 @@ pub fn main() {
     // let light_pos_loc = light_shader.get_shader_location("pointLightPos");
 
     wall.get_material(0)
+        .context("Material not found")?
         .set_texture(MaterialMapIndex::Albedo, texture);
 
     floor.set_shader(&light_shader);
@@ -41,6 +43,7 @@ pub fn main() {
     woman.set_shader(&light_shader);
     car.set_shader(&light_shader);
     wall.set_shader(&light_shader);
+
     set_target_fps(120);
     // Render the window
     while !(window.should_close()) {
@@ -91,4 +94,5 @@ pub fn main() {
             draw_fps(10, 10);
         });
     }
+    return Ok(());
 }

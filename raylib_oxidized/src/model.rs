@@ -1,4 +1,4 @@
-use crate::{Vector3, colors, consts::MaterialMapIndex, material::Material, shader::Shader};
+use crate::{Vector3, colors, material::Material, shader::Shader};
 
 pub struct Model {
     model: raylib_ffi::Model,
@@ -11,10 +11,13 @@ impl Model {
             Model { model }
         }
     }
-    pub fn get_material(&mut self, index: usize) -> Material<'_> {
+    pub fn get_material(&mut self, index: usize) -> Option<Material<'_>> {
+        if index >= self.model.materialCount as usize {
+            return None;
+        }
         unsafe {
             let mat_ptr = self.model.materials.add(index);
-            Material::from_raw_mut(mat_ptr)
+            Some(Material::from_raw_mut(mat_ptr))
         }
     }
     pub fn draw_model(&self, position: Vector3) {

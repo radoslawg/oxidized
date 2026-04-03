@@ -5,6 +5,7 @@ use crate::camera3d::Camera3D;
 pub mod camera3d;
 pub mod colors;
 pub mod consts;
+pub mod light;
 pub mod material;
 pub mod model;
 pub mod shader;

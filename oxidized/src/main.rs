@@ -1,7 +1,14 @@
 use anyhow::{Context, Result};
 use raylib_oxidized::{
-    camera3d::Camera3D, material::MaterialMapIndex, model::Model, shader::Shader, vector::Vector3,
-    window::Window, *,
+    camera3d::Camera3D,
+    colors::*,
+    light::Light,
+    material::MaterialMapIndex,
+    model::Model,
+    shader::{Shader, ShaderUniformValue},
+    vector::Vector3,
+    window::Window,
+    *,
 };
 
 pub fn main() -> Result<()> {
@@ -24,6 +31,15 @@ pub fn main() -> Result<()> {
         },
         45.0,
     );
+    let lights = [Light::new(
+        Vector3 {
+            x: 0.,
+            y: 0.,
+            z: 1.,
+        },
+        10.0,
+        RED,
+    )];
     let mut wall = Model::load_model("assets/models/BasicWall.gltf");
     let floor = Model::load_model("assets/models/floor.glb");
     let character = Model::load_model("assets/models/block_man.gltf");
@@ -32,7 +48,6 @@ pub fn main() -> Result<()> {
     let texture = load_texture("assets/colors/apollo.png");
     let light_shader =
         Shader::load_shader("assets/shaders/light.vert", "assets/shaders/light.frag");
-    // let light_pos_loc = light_shader.get_shader_location("pointLightPos");
 
     wall.get_material(0)
         .context("Material not found")?
@@ -43,6 +58,8 @@ pub fn main() -> Result<()> {
     woman.set_shader(&light_shader);
     car.set_shader(&light_shader);
     wall.set_shader(&light_shader);
+
+    set_shader_lights(&light_shader, &lights);
 
     set_target_fps(120);
     // Render the window
@@ -94,5 +111,22 @@ pub fn main() -> Result<()> {
             draw_fps(10, 10);
         });
     }
-    return Ok(());
+    Ok(())
+}
+
+fn set_shader_lights(shader: &Shader, lights: &[Light]) {
+    shader.set_value(
+        "num_lights",
+        shader::ShaderUniformValue::Int(lights.len() as i32),
+    );
+    for (index, light) in lights.iter().enumerate() {
+        shader.set_value(
+            &format!("lights[{}].enabled", index),
+            ShaderUniformValue::Int(1),
+        );
+        shader.set_value(
+            &format!("lights[{}].position", index),
+            ShaderUniformValue::Vec3(light.position),
+        );
+    }
 }

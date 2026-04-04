@@ -31,15 +31,6 @@ pub fn main() -> Result<()> {
         },
         45.0,
     );
-    let lights = [Light::new(
-        Vector3 {
-            x: 10.5,
-            y: 4.5,
-            z: 4.,
-        },
-        1000.0,
-        RED,
-    )];
     let mut wall = Model::load_model("assets/models/BasicWall.gltf");
     let floor = Model::load_model("assets/models/floor.glb");
     let character = Model::load_model("assets/models/block_man.gltf");

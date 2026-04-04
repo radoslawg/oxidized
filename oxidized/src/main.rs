@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use raylib_oxidized::{
-    camera3d::Camera3D, material::MaterialMapIndex, model::Model, shader::Shader, vector::Vector3,
-    window::Window, *,
+    camera3d::Camera3D, consts::LogLevel, material::MaterialMapIndex, model::Model, shader::Shader,
+    vector::Vector3, window::Window, *,
 };
 use simplelog::TermLogger;
 
@@ -14,6 +14,8 @@ pub fn main() -> Result<()> {
     )
     .context("Cannot initilize Logger")?;
     log::info!("Oxidized starting up...");
+    set_trace_log_level(LogLevel::Warning);
+
     let window = Window::new(1600, 900, "Oxidized");
     let mut camera = Camera3D::new(
         Vector3 {

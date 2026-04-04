@@ -12,6 +12,11 @@ pub mod texture2d;
 pub mod vector;
 pub mod window;
 
+pub fn set_trace_log_level(level: consts::LogLevel) {
+    unsafe {
+        raylib_ffi::SetTraceLogLevel(level as i32);
+    }
+}
 pub fn load_texture(path: &str) -> Texture2D {
     unsafe { raylib_ffi::LoadTexture(raylib_ffi::rl_str!(path)) }
 }

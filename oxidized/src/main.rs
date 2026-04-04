@@ -33,11 +33,11 @@ pub fn main() -> Result<()> {
     );
     let lights = [Light::new(
         Vector3 {
-            x: 0.,
-            y: 0.,
-            z: 1.,
+            x: 10.5,
+            y: 4.5,
+            z: 4.,
         },
-        10.0,
+        1000.0,
         RED,
     )];
     let mut wall = Model::load_model("assets/models/BasicWall.gltf");
@@ -58,8 +58,6 @@ pub fn main() -> Result<()> {
     woman.set_shader(&light_shader);
     car.set_shader(&light_shader);
     wall.set_shader(&light_shader);
-
-    set_shader_lights(&light_shader, &lights);
 
     set_target_fps(120);
     // Render the window
@@ -96,16 +94,31 @@ pub fn main() -> Result<()> {
                     y: 0.5,
                     z: 0.0,
                 });
-                character.draw_model(Vector3 {
+                let character_pos = Vector3 {
                     x: 12.0,
                     y: 0.5,
                     z: 8.0,
-                });
-                woman.draw_model(Vector3 {
+                };
+                character.draw_model(character_pos);
+                let woman_pos = Vector3 {
                     x: 8.0,
                     y: 0.5,
                     z: 8.0,
-                });
+                };
+                woman.draw_model(woman_pos);
+                let lights = [
+                    Light {
+                        position: character_pos,
+                        falloff: 5.0,
+                        color: YELLOW,
+                    },
+                    Light {
+                        position: woman_pos,
+                        falloff: 10.0,
+                        color: SKYBLUE,
+                    },
+                ];
+                set_shader_lights(&light_shader, &lights);
                 // DrawGrid(20, 1.0);
             });
             draw_fps(10, 10);
@@ -116,7 +129,7 @@ pub fn main() -> Result<()> {
 
 fn set_shader_lights(shader: &Shader, lights: &[Light]) {
     shader.set_value(
-        "num_lights",
+        "numLights",
         shader::ShaderUniformValue::Int(lights.len() as i32),
     );
     for (index, light) in lights.iter().enumerate() {
@@ -127,6 +140,14 @@ fn set_shader_lights(shader: &Shader, lights: &[Light]) {
         shader.set_value(
             &format!("lights[{}].position", index),
             ShaderUniformValue::Vec3(light.position),
+        );
+        shader.set_value(
+            &format!("lights[{}].falloff", index),
+            ShaderUniformValue::Float(light.falloff),
+        );
+        shader.set_value(
+            &format!("lights[{}].color", index),
+            ShaderUniformValue::Vec4(color_to_vec4(light.color)),
         );
     }
 }

@@ -2,6 +2,7 @@ use std::ffi::c_void;
 
 use crate::vector::{Vector3, Vector4};
 
+#[derive(Debug)]
 pub enum ShaderUniformValue {
     Float(f32),
     Int(i32),

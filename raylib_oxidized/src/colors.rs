@@ -1,5 +1,15 @@
+use crate::vector::Vector4;
+
 pub type Color = raylib_ffi::Color;
 
+pub fn color_to_vec4(color: Color) -> Vector4 {
+    Vector4 {
+        x: color.r as f32 / 255.0,
+        y: color.g as f32 / 255.0,
+        z: color.b as f32 / 255.0,
+        w: color.a as f32 / 255.0,
+    }
+}
 /// Light Gray
 pub const LIGHTGRAY: Color = Color {
     r: 200,

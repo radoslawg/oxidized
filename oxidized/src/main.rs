@@ -2,6 +2,7 @@ use anyhow::{Context, Result};
 use raylib_oxidized::{
     camera3d::Camera3D,
     colors::*,
+    consts::LogLevel,
     light::Light,
     material::MaterialMapIndex,
     model::Model,
@@ -10,8 +11,19 @@ use raylib_oxidized::{
     window::Window,
     *,
 };
+use simplelog::TermLogger;
 
 pub fn main() -> Result<()> {
+    TermLogger::init(
+        log::LevelFilter::Info,
+        simplelog::Config::default(),
+        simplelog::TerminalMode::Mixed,
+        simplelog::ColorChoice::Auto,
+    )
+    .context("Cannot initilize Logger")?;
+    log::info!("Oxidized starting up...");
+    set_trace_log_level(LogLevel::Warning);
+
     let window = Window::new(1600, 900, "Oxidized");
     let mut camera = Camera3D::new(
         Vector3 {
@@ -36,6 +48,7 @@ pub fn main() -> Result<()> {
     let character = Model::load_model("assets/models/block_man.gltf");
     let woman = Model::load_model("assets/models/Block_Woman.gltf");
     let car = Model::load_model("assets/models/car.glb");
+    log::debug!("Models loaded");
     let texture = load_texture("assets/colors/apollo.png");
     let light_shader =
         Shader::load_shader("assets/shaders/light.vert", "assets/shaders/light.frag");
@@ -49,6 +62,8 @@ pub fn main() -> Result<()> {
     woman.set_shader(&light_shader);
     car.set_shader(&light_shader);
     wall.set_shader(&light_shader);
+
+    log::info!("Setup complete...");
 
     set_target_fps(120);
     // Render the window

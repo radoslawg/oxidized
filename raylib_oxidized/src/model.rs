@@ -25,6 +25,7 @@ impl Model {
     }
 
     pub fn set_shader(&self, shader: &Shader) {
+        log::debug!("Shader set.");
         unsafe {
             let materials = std::slice::from_raw_parts_mut(
                 self.model.materials,

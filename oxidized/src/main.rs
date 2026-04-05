@@ -42,8 +42,11 @@ pub fn main() -> Result<()> {
     let car = Model::load_model("assets/models/car.glb");
     log::debug!("Models loaded");
     let texture = load_texture("assets/colors/apollo.png");
-    let light_shader =
-        Shader::load_shader("assets/shaders/light.vert", "assets/shaders/light.frag");
+    let light_shader = Shader::load_shader(
+        Some("assets/shaders/light.vert"),
+        "assets/shaders/light.frag",
+    );
+    let bloom_shader = Shader::load_shader(None, "assets/shaders/bloom.frag");
     // let light_pos_loc = light_shader.get_shader_location("pointLightPos");
 
     wall.get_material(0)
@@ -63,47 +66,49 @@ pub fn main() -> Result<()> {
     while !(window.should_close()) {
         //light_shader.set_shader_value(light_pos_loc, my_light_pos);
         camera.update();
-        draw(|| {
-            // Render text and a background
-            clear_background(colors::SKYBLUE);
-            draw_text(
-                "Oxidized! Now in Rust's safe mode!",
-                210,
-                200,
-                20,
-                colors::BLACK,
-            );
-            mode_3d(&camera, || {
-                for x in -4..=6 {
-                    for z in -4..=6 {
-                        floor.draw_model(Vector3 {
-                            x: -4.0 * x as f32,
-                            y: 0.0,
-                            z: -4.0 * z as f32,
-                        });
+        bloom_shader.shader_mode(|| {
+            draw(|| {
+                // Render text and a background
+                clear_background(colors::SKYBLUE);
+                draw_text(
+                    "Oxidized! Now in Rust's safe mode!",
+                    210,
+                    200,
+                    20,
+                    colors::BLACK,
+                );
+                mode_3d(&camera, || {
+                    for x in -4..=6 {
+                        for z in -4..=6 {
+                            floor.draw_model(Vector3 {
+                                x: -4.0 * x as f32,
+                                y: 0.0,
+                                z: -4.0 * z as f32,
+                            });
+                        }
                     }
-                }
-                car.draw_model(Vector3 {
-                    x: 0.0,
-                    y: 0.5,
-                    z: 0.0,
+                    car.draw_model(Vector3 {
+                        x: 0.0,
+                        y: 0.5,
+                        z: 0.0,
+                    });
+                    wall.draw_model(Vector3 {
+                        x: 4.0,
+                        y: 0.5,
+                        z: 0.0,
+                    });
+                    character.draw_model(Vector3 {
+                        x: 12.0,
+                        y: 0.5,
+                        z: 8.0,
+                    });
+                    woman.draw_model(Vector3 {
+                        x: 8.0,
+                        y: 0.5,
+                        z: 8.0,
+                    });
+                    // DrawGrid(20, 1.0);
                 });
-                wall.draw_model(Vector3 {
-                    x: 4.0,
-                    y: 0.5,
-                    z: 0.0,
-                });
-                character.draw_model(Vector3 {
-                    x: 12.0,
-                    y: 0.5,
-                    z: 8.0,
-                });
-                woman.draw_model(Vector3 {
-                    x: 8.0,
-                    y: 0.5,
-                    z: 8.0,
-                });
-                // DrawGrid(20, 1.0);
             });
             draw_fps(10, 10);
         });

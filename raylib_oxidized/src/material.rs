@@ -1,6 +1,7 @@
 use crate::texture2d::Texture2D;
 
 #[repr(usize)]
+#[derive(Debug, Copy, Clone)]
 pub enum MaterialMapIndex {
     Albedo = 0,
     Metalness = 1,
@@ -36,5 +37,6 @@ impl<'a> Material<'a> {
 
             maps_slice[map_type as usize].texture = texture;
         }
+        log::debug!("Texture for {:?} set.", map_type);
     }
 }

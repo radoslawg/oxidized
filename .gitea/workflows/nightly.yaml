@@ -100,12 +100,20 @@ jobs:
         shell: bash
         run: |
           mkdir -p staging/oxidized-wasm
-          cp target/${{ matrix.target }}/release/oxidized.js staging/oxidized-wasm/index.js
-          cp target/${{ matrix.target }}/release/oxidized.wasm staging/oxidized-wasm/index.wasm
-          if [ -f "target/${{ matrix.target }}/release/oxidized.data" ]; then
-            cp target/${{ matrix.target }}/release/oxidized.data staging/oxidized-wasm/index.data
+          cp target/${{ matrix.target }}/release/oxidized.js staging/oxidized-wasm/
+          cp target/${{ matrix.target }}/release/oxidized.wasm staging/oxidized-wasm/
+          
+          # Cargo leaves the Emscripten .data file in the deps/ directory with a hash.
+          # We locate it and copy it over with its original name.
+          DATA_FILE=$(find target/${{ matrix.target }}/release/deps -maxdepth 1 -name "oxidized*.data" | head -n 1)
+          if [ -n "$DATA_FILE" ] && [ -f "$DATA_FILE" ]; then
+            cp "$DATA_FILE" staging/oxidized-wasm/
+          elif [ -f "target/${{ matrix.target }}/release/oxidized.data" ]; then
+            # Fallback in case cargo changes this behavior in the future
+            cp target/${{ matrix.target }}/release/oxidized.data staging/oxidized-wasm/
           fi
-          cat raylib-ffi/third_party/raylib/src/minshell.html | sed 's/{{{ SCRIPT }}}/<script src="index.js"><\/script>/g' > staging/oxidized-wasm/index.html
+          
+          cat raylib-ffi/third_party/raylib/src/minshell.html | sed 's/{{{ SCRIPT }}}/<script src="oxidized.js"><\/script>/g' > staging/oxidized-wasm/index.html
           cd staging
           zip -r ${{ matrix.asset_name }}.zip oxidized-wasm/*
           rm -rf oxidized-wasm

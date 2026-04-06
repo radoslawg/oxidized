@@ -9,8 +9,39 @@ permissions:
   contents: write
 
 jobs:
+  check_commits:
+    name: Check for new commits
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for commits in the last 24 hours
+        id: check
+        run: |
+          if [ "${{ gitea.event_name }}" = "workflow_dispatch" ]; then
+            echo "Workflow manually triggered, forcing run."
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          
+          COMMITS=$(git log --oneline --since="24 hours ago" | wc -l)
+          if [ "$COMMITS" -gt 0 ]; then
+            echo "Found $COMMITS commits in the last 24 hours. Proceeding."
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No commits found in the last 24 hours. Skipping build."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
     name: Build (${{ matrix.name }})
+    needs: check_commits
+    if: needs.check_commits.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

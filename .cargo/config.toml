@@ -1,0 +1,8 @@
+[target.wasm32-unknown-emscripten]
+linker = "emcc"
+# You may also need to pass specific flags to Emscripten here via rustflags
+rustflags = [
+    "-C", "link-arg=-s", "-C", "link-arg=USE_GLFW=3",
+    "-C", "link-arg=-s", "-C", "link-arg=WASM=1",
+    "-C", "link-arg=-s", "-C", "link-arg=ASYNCIFY" # Often needed for game loops in browsers
+]

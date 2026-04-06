@@ -2,5 +2,6 @@
 members = [
     "raylib_oxidized",
     "oxidized",
+    "raylib-ffi"
 ]
 resolver = "2"

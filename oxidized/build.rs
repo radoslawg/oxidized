@@ -3,8 +3,8 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    // Monitor directory 'assets'
-    println!("cargo:rerun-if-changed=assets");
+    // Monitor directory 'resources'
+    println!("cargo:rerun-if-changed=resources");
 
     let out_dir = env::var("OUT_DIR").unwrap();
 
@@ -20,7 +20,7 @@ fn main() {
     options.copy_inside = true;
 
     // Wykonanie kopiowania
-    let result = copy("assets", &target_dir, &options);
+    let result = copy("resources", &target_dir, &options);
 
     if let Err(e) = result {
         panic!("Error copying static files: {}", e);

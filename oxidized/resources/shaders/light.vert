@@ -1,19 +1,19 @@
-#version 330
+#version 100
 
 // Attributes
-in vec3 vertexPosition;
-in vec2 vertexTexCoord;
-in vec3 vertexNormal;
-in vec4 vertexColor; // We need this back!
+attribute vec3 vertexPosition;
+attribute vec2 vertexTexCoord;
+attribute vec3 vertexNormal;
+attribute vec4 vertexColor; // We need this back!
 
 // Standard Uniforms
 uniform mat4 mvp;
 uniform mat4 matNormal;
 
 // Outputs to Fragment Shader
-out vec2 fragTexCoord;
-out vec4 fragColor; // Passing the vertex color through
-out float fragBrightness;
+varying vec2 fragTexCoord;
+varying vec4 fragColor; // Passing the vertex color through
+varying float fragBrightness;
 
 void main()
 {

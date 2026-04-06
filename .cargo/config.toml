@@ -4,5 +4,6 @@ linker = "emcc"
 rustflags = [
     "-C", "link-arg=-s", "-C", "link-arg=USE_GLFW=3",
     "-C", "link-arg=-s", "-C", "link-arg=WASM=1",
-    "-C", "link-arg=-s", "-C", "link-arg=ASYNCIFY" # Often needed for game loops in browsers
+    "-C", "link-arg=-s", "-C", "link-arg=ASYNCIFY", # Often needed for game loops in browsers
+    "-C", "link-arg=-fno-wasm-exceptions"
 ]

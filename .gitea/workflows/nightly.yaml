@@ -20,10 +20,12 @@ jobs:
             name: linux-x86_64
             artifact_name: oxidized
             asset_name: oxidized-linux-x86_64
+            extension: tar.gz
           - target: wasm32-unknown-emscripten
             name: wasm-emscripten
             artifact_name: oxidized-wasm
-            asset_name: oxidized-wasm.zip
+            asset_name: oxidized-wasm
+            extension: zip
 
     steps:
       - name: Checkout repository code
@@ -55,25 +57,33 @@ jobs:
         if: matrix.target == 'x86_64-unknown-linux-gnu'
         shell: bash
         run: |
-          mkdir -p staging
-          cp target/${{ matrix.target }}/release/${{ matrix.artifact_name }} staging/${{ matrix.asset_name }}
+          mkdir -p staging/oxidized-linux-x86_64
+          cp target/${{ matrix.target }}/release/${{ matrix.artifact_name }} staging/oxidized-linux-x86_64/
+          cp -r target/${{ matrix.target }}/release/resources staging/oxidized-linux-x86_64/
+          cd staging
+          tar -czvf ${{ matrix.asset_name }}.tar.gz oxidized-linux-x86_64/
+          rm -rf oxidized-linux-x86_64
 
       - name: Prepare Binary (WASM)
         if: matrix.target == 'wasm32-unknown-emscripten'
         shell: bash
         run: |
           mkdir -p staging/oxidized-wasm
-          cp target/${{ matrix.target }}/release/oxidized.js staging/oxidized-wasm/
-          cp target/${{ matrix.target }}/release/oxidized.wasm staging/oxidized-wasm/
-          cat raylib-ffi/third_party/raylib/src/minshell.html | sed 's/{{{ SCRIPT }}}/<script src="oxidized.js"><\/script>/g' > staging/oxidized-wasm/index.html
-          cd staging/oxidized-wasm
-          zip -r ../${{ matrix.asset_name }} ./*
+          cp target/${{ matrix.target }}/release/oxidized.js staging/oxidized-wasm/index.js
+          cp target/${{ matrix.target }}/release/oxidized.wasm staging/oxidized-wasm/index.wasm
+          if [ -f "target/${{ matrix.target }}/release/oxidized.data" ]; then
+            cp target/${{ matrix.target }}/release/oxidized.data staging/oxidized-wasm/index.data
+          fi
+          cat raylib-ffi/third_party/raylib/src/minshell.html | sed 's/{{{ SCRIPT }}}/<script src="index.js"><\/script>/g' > staging/oxidized-wasm/index.html
+          cd staging
+          zip -r ${{ matrix.asset_name }}.zip oxidized-wasm/*
+          rm -rf oxidized-wasm
 
       - name: Upload Artifact
         uses: https://github.com/christopherHX/gitea-upload-artifact@v4
         with:
-          name: ${{ matrix.asset_name }}
-          path: staging/${{ matrix.asset_name }}
+          name: ${{ matrix.asset_name }}.${{ matrix.extension }}
+          path: staging/${{ matrix.asset_name }}.${{ matrix.extension }}
 
   publish:
     name: Publish Nightly

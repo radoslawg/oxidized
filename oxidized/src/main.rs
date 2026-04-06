@@ -14,6 +14,16 @@ pub fn main() -> Result<()> {
     )
     .context("Cannot initilize Logger")?;
     log::info!("Oxidized starting up...");
+
+    // Try to fix paths when running directly from the workspace root or the debug/release target directory
+    if let Ok(exe_path) = std::env::current_exe() {
+        if let Some(exe_dir) = exe_path.parent() {
+            if exe_dir.join("resources").exists() {
+                let _ = std::env::set_current_dir(exe_dir);
+            }
+        }
+    }
+
     set_trace_log_level(LogLevel::Warning);
 
     let window = Window::new(1600, 900, "Oxidized");

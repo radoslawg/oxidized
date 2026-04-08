@@ -22,6 +22,16 @@ pub fn main() -> Result<()> {
     )
     .context("Cannot initilize Logger")?;
     log::info!("Oxidized starting up...");
+
+    // Try to fix paths when running directly from the workspace root or the debug/release target directory
+    if let Ok(exe_path) = std::env::current_exe() {
+        if let Some(exe_dir) = exe_path.parent() {
+            if exe_dir.join("resources").exists() {
+                let _ = std::env::set_current_dir(exe_dir);
+            }
+        }
+    }
+
     set_trace_log_level(LogLevel::Warning);
 
     let window = Window::new(1600, 900, "Oxidized");
@@ -43,15 +53,18 @@ pub fn main() -> Result<()> {
         },
         45.0,
     );
-    let mut wall = Model::load_model("assets/models/BasicWall.gltf");
-    let floor = Model::load_model("assets/models/floor.glb");
-    let character = Model::load_model("assets/models/block_man.gltf");
-    let woman = Model::load_model("assets/models/Block_Woman.gltf");
-    let car = Model::load_model("assets/models/car.glb");
+    let mut wall = Model::load_model("resources/models/BasicWall.gltf");
+    let floor = Model::load_model("resources/models/floor.glb");
+    let character = Model::load_model("resources/models/block_man.gltf");
+    let woman = Model::load_model("resources/models/Block_Woman.gltf");
+    let car = Model::load_model("resources/models/car.glb");
     log::debug!("Models loaded");
-    let texture = load_texture("assets/colors/apollo.png");
-    let light_shader =
-        Shader::load_shader("assets/shaders/light.vert", "assets/shaders/light.frag");
+    let texture = load_texture("resources/colors/apollo.png");
+    let light_shader = Shader::load_shader(
+        "resources/shaders/light.vert",
+        "resources/shaders/light.frag",
+    );
+    // let light_pos_loc = light_shader.get_shader_location("pointLightPos");
 
     wall.get_material(0)
         .context("Material not found")?

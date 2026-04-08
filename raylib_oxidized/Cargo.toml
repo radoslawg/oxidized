@@ -9,6 +9,6 @@ path = "src/lib.rs"
 
 [dependencies]
 anyhow = "1.0.102"
-raylib-ffi = "5.5.1"
+raylib-ffi = { path = "../raylib-ffi" }
 log = "0.4.29"
 simplelog = "0.12.2"

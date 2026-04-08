@@ -1,0 +1,3 @@
+[submodule "raylib-ffi"]
+	path = raylib-ffi
+	url = https://github.com/radoslawg/raylib-ffi.git

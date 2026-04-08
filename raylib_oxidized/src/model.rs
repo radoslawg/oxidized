@@ -1,7 +1,7 @@
-use raylib_ffi::*;
+use crate::{Vector3, colors, material::Material, shader::Shader};
 
 pub struct Model {
-    pub model: raylib_ffi::Model,
+    model: raylib_ffi::Model,
 }
 
 impl Model {
@@ -11,17 +11,29 @@ impl Model {
             Model { model }
         }
     }
-    pub fn materials(&self) -> &[Material] {
-        unsafe {
-            std::slice::from_raw_parts(self.model.materials, self.model.materialCount as usize)
+    pub fn get_material(&mut self, index: usize) -> Option<Material<'_>> {
+        if index >= self.model.materialCount as usize {
+            return None;
         }
-    }
-    pub fn materials_mut(&mut self) -> &mut [Material] {
         unsafe {
-            std::slice::from_raw_parts_mut(self.model.materials, self.model.materialCount as usize)
+            let mat_ptr = self.model.materials.add(index);
+            Some(Material::from_raw_mut(mat_ptr))
         }
     }
     pub fn draw_model(&self, position: Vector3) {
-        unsafe { DrawModel(self.model, position, 1.0, colors::WHITE) }
+        unsafe { raylib_ffi::DrawModel(self.model, position, 1.0, colors::WHITE) }
+    }
+
+    pub fn set_shader(&self, shader: &Shader) {
+        log::debug!("Shader set.");
+        unsafe {
+            let materials = std::slice::from_raw_parts_mut(
+                self.model.materials,
+                self.model.materialCount as usize,
+            );
+            for material in materials {
+                material.shader = shader.shader;
+            }
+        }
     }
 }

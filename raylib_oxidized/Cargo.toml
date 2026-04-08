@@ -8,4 +8,7 @@ name = "raylib_oxidized"
 path = "src/lib.rs"
 
 [dependencies]
-raylib-ffi = "5.5.1"
+anyhow = "1.0.102"
+raylib-ffi = { path = "../raylib-ffi" }
+log = "0.4.29"
+simplelog = "0.12.2"

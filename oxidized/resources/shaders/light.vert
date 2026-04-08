@@ -19,11 +19,11 @@ void main()
 {
     // 1. Calculate normal and light direction
     vec3 normal = normalize((matNormal * vec4(vertexNormal, 1.0)).xyz);
-    vec3 lightDir = vec3(0.3, 1.0, 0.2); // Pointing straight down
+    vec3 lightDir = vec3(0.2, 1.0, 0.3); // Pointing straight down
 
     // 2. Calculate diffuse and ambient lighting
     float diffuse = max(dot(normal, lightDir), 0.0);
-    float ambient = 0.4;
+    float ambient = 0.2;
 
     // 3. Output our values to the next step
     fragBrightness = clamp(ambient + diffuse, 0.0, 1.0);
@@ -33,3 +33,4 @@ void main()
     // 4. Output final vertex position
     gl_Position = mvp * vec4(vertexPosition, 1.0);
 }
+

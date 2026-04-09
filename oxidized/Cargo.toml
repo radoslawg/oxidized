@@ -8,7 +8,6 @@ log = "0.4.29"
 simplelog = "0.12.2"
 raylib_oxidized = { path = "../raylib_oxidized" }
 anyhow = "1.0.102"
-gltf = { version = "1.4.1", features = ["KHR_lights_punctual", "KHR_materials_emissive_strength", "extras"] }
 
 [build-dependencies]
 fs_extra = "1.3.0"

@@ -1,5 +1,7 @@
 use std::ffi::c_void;
 
+use raylib_ffi::{RL_MAX_SHADER_LOCATIONS, enums::ShaderLocationIndex};
+
 use crate::vector::{Vector3, Vector4};
 
 #[derive(Debug)]
@@ -38,6 +40,8 @@ impl Shader {
                 raylib_ffi::rl_str!(vertex_shader),
                 raylib_ffi::rl_str!(fragment_shader),
             );
+            Shader::enable_emission(shader);
+
             Shader { shader }
         }
     }
@@ -94,6 +98,17 @@ impl Shader {
                     ShaderUnformDataType::Vec4 as i32,
                 ),
             }
+        }
+    }
+    fn enable_emission(shader: raylib_ffi::Shader) {
+        unsafe {
+            // Set emission texture location
+            let emission_loc =
+                raylib_ffi::GetShaderLocation(shader, raylib_ffi::rl_str!("emission"));
+            let loc_index = ShaderLocationIndex::MapEmission as usize;
+            let locs =
+                std::slice::from_raw_parts_mut(shader.locs, RL_MAX_SHADER_LOCATIONS as usize);
+            locs[loc_index] = emission_loc;
         }
     }
 }

@@ -371,7 +371,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "fs_extra",
- "gltf",
  "log",
  "raylib_oxidized",
  "simplelog",
@@ -448,6 +447,7 @@ name = "raylib_oxidized"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "gltf",
  "log",
  "raylib-ffi",
  "simplelog",

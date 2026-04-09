@@ -35,8 +35,18 @@ impl<'a> Material<'a> {
         unsafe {
             let maps_slice = std::slice::from_raw_parts_mut(self.raw.maps, MAX_MATERIAL_MAPS);
 
+            log::trace!("Before Texture Set: {:?}", maps_slice[map_type as usize]);
             maps_slice[map_type as usize].texture = texture;
+            log::trace!("After Texture Set: {:?}", maps_slice[map_type as usize]);
         }
-        log::debug!("Texture for {:?} set.", map_type);
+        log::trace!("Texture for {:?} set.", map_type);
+    }
+
+    pub fn get_map_id(&self, map_type: MaterialMapIndex) -> u32 {
+        const MAX_MATERIAL_MAPS: usize = 12;
+        unsafe {
+            let maps_slice = std::slice::from_raw_parts_mut(self.raw.maps, MAX_MATERIAL_MAPS);
+            maps_slice[map_type as usize].texture.id
+        }
     }
 }

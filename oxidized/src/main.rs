@@ -5,6 +5,10 @@ use raylib_oxidized::{
 };
 use simplelog::TermLogger;
 
+const WINDOW_WIDTH: u32 = 1280;
+const WINDOW_HEIGHT: u32 = 720;
+const WINDOW_TITLE: &str = "Oxidize";
+
 pub fn main() -> Result<()> {
     TermLogger::init(
         log::LevelFilter::Debug,
@@ -14,7 +18,7 @@ pub fn main() -> Result<()> {
     )
     .context("Cannot initilize Logger")?;
     set_trace_log_level(LogLevel::Warning);
-    log::info!("Oxidized starting up...");
+    log::info!("-*-*-*- Oxidized Starting Up -*-*-*-");
 
     // Try to fix paths when running directly from the workspace root or the debug/release target directory
     if let Ok(exe_path) = std::env::current_exe()
@@ -24,7 +28,7 @@ pub fn main() -> Result<()> {
         let _ = std::env::set_current_dir(exe_dir);
     }
 
-    let window = Window::new(1600, 900, "Oxidized");
+    let window = Window::new(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
     let mut camera = Camera3D::new(
         Vector3 {
             x: 15.0,
@@ -176,5 +180,15 @@ fn set_shader_lights(shader: &Shader, lights: &[Light]) {
                 z: 0.0,
             })),
         );
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_has_correct_aspect_ration() {
+        assert_eq!(WINDOW_WIDTH / WINDOW_HEIGHT, 16 / 9);
     }
 }

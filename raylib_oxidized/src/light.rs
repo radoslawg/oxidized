@@ -47,7 +47,10 @@ impl Light {
         ) <= self.falloff
     }
     pub fn load_lights(file_path: &str) -> Vec<Self> {
-        let (document, _, _) = gltf::import(file_path).expect("Failed to load glTF");
+        log::trace!("Trying to load lights from {file_path}");
+        let Ok((document, _, _)) = gltf::import(file_path) else {
+            return Vec::new();
+        };
         let mut result: Vec<Light> = Vec::with_capacity(4);
         for node in document.nodes() {
             if let Some(light) = node.light() {

@@ -4,6 +4,7 @@ use raylib_oxidized::{
     window::*, *,
 };
 use simplelog::TermLogger;
+mod ecs;
 
 const WINDOW_WIDTH: u32 = 1280;
 const WINDOW_HEIGHT: u32 = 720;
